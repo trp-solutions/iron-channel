@@ -35,7 +35,10 @@ final class JWTGenerate extends CurlOpt {
 			$this->jwt_payload['exp'] = time() + $this->expire;
 		}
 
-		$this->jwt_payload['body_hash'] = 'sha256:'.($this->body_hash_func)('sha256');
+		if(!isset($this->body_hash_func)){
+			throw new \Exception('Request type doesn\'t support body hashing required by JWT authorization');
+		}
+		$this->jwt_payload['body_hash'] = 'sha256:'.($this->body_hash_func)('sha256', hash_empty_body: true);
 
 		$data = self::jwt_encode(json_encode($this->jwt_header));
 		$data .= '.'.self::jwt_encode(json_encode($this->jwt_payload));

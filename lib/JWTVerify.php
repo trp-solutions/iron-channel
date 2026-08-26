@@ -63,6 +63,9 @@ final class JWTVerify implements Auth {
 			throw new \Exception('JWT payload:body_hash invalid format',401);
 		}
 		list($algo,$user_string) = $body_hash;
+		if($algo !== 'sha256'){
+			throw new \Exception('JWT payload:body_hash invalid algorithm',401);
+		}
 		$known_string = hash_file($algo,'php://input');
 		if(!hash_equals($known_string, $user_string)) {
 			throw new \Exception('JWT payload:body_hash incorrect',401);

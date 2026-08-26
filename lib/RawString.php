@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class RawString extends CurlOpt implements Data {
+class RawString extends CurlOpt implements Data, DataHash {
 	private string $data;
 	private string $type;
 
@@ -34,7 +34,7 @@ class RawString extends CurlOpt implements Data {
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $this->data);
 	}
-	public function curl_hash(string $algo) : string {
-		return hash($algo, $this->data);
+	public function curl_hash(string $algo, bool $hash_empty_body = true) : ?string {
+		return empty($this->data) && !$hash_empty_body ? null : hash($algo, $this->data);
 	}
 }

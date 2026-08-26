@@ -47,9 +47,11 @@ final class Bearer extends CurlOpt implements Auth {
 	}
 	public function curl_header() : array {
 		$return = ['Authorization: Bearer '.$this->token];
-		$body_hash = ($this->body_hash_func)('sha256');
-		if($body_hash) {
-			$return[] = 'X-Body-Hash: '.'sha256='.$body_hash;
+		if(isset($this->body_hash_func)){
+			$body_hash = ($this->body_hash_func)('sha256', hash_empty_body: false);
+			if(!empty($body_hash)) {
+				$return[] = 'X-Body-Hash: '.'sha256='.$body_hash;
+			}
 		}
 		return $return;
 	}

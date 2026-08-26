@@ -6,7 +6,7 @@ https://github.com/TRP-Solutions/iron-channel/blob/main/LICENSE
 declare(strict_types=1);
 namespace TRP\IronChannel;
 
-class JSON extends CurlOpt implements Data {
+class JSON extends CurlOpt implements Data, DataHash {
 	private mixed $data = null;
 	private string $method = 'GET';
 
@@ -65,7 +65,14 @@ class JSON extends CurlOpt implements Data {
 			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->data));
 		}
 	}
-	public function curl_hash(string $algo) : string {
-		return hash($algo, json_encode($this->data));
+	public function curl_hash(string $algo, bool $hash_empty_body = true) : ?string {
+		if($this->data !== null){
+			$body = json_encode($this->data);
+		} elseif($hash_empty_body){
+			$body = '';
+		} else {
+			return null;
+		}
+		return hash($algo, $body);
 	}
 }

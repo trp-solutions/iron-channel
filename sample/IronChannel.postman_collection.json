@@ -140,7 +140,7 @@
     {
       "key": "BaseURL",
       "value": "",
-      "description": "Eg. https://localhost/github/iron-channel"
+      "description": "Eg. https://localhost/github/IronChannel"
     },
     {
       "key": "Secret",
